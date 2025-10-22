@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Welcome from "./pages/Welcome";
+import PrivateRoute from "./routes/PrivateRoute";
+
 
 const App = () => {
   return (
@@ -10,7 +12,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/welcome" element={<Welcome />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/welcome" element={<Welcome />} />
+        </Route>
       </Routes>
     </Router>
   );
