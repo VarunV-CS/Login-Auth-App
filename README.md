@@ -1,5 +1,5 @@
 # Login Auth App
-Authentication built with Vite React
+Authentication app(FE_01) built with Vite React
 
  Vite requires Node.js version 20.19+ or 22.12+.
 
