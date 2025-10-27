@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/style.css";
 
 const Profile = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.username) {
-      setUsername(user.username);
-    } else {
-      navigate("/"); // redirect if no user found
-    }
-  }, [navigate]);
 
   return (
-    <div className="container">
-      <h2>User Profile</h2>
-      <p><strong>Username:</strong> {username}</p>
-
-      <button onClick={() => navigate("/welcome")}>⬅ Back to Home</button>
+    <div className="profile-container">
+      <h2>Profile</h2>
+      <p><strong>Username:</strong> {user?.username}</p>
+      <button onClick={() => navigate("/welcome")} className="form-btn">
+        Back to Welcome
+      </button>
     </div>
   );
 };

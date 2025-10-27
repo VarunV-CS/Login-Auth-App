@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import InputField from "../components/InputField";
 import "../styles/style.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Prevent access to login page if already logged in
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-    if (isAuthenticated) {
-      navigate("/welcome");
-    }
-  }, [navigate]);
+    if (isAuthenticated) navigate("/welcome");
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -25,7 +23,7 @@ const Login = () => {
       storedUser.username === username &&
       storedUser.password === password
     ) {
-      localStorage.setItem("isAuthenticated", "true");
+      login(storedUser);
       alert("Login successful!");
       navigate("/welcome");
     } else {
@@ -51,9 +49,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="form-btn">
-          Login
-        </button>
+        <button type="submit" className="form-btn">Login</button>
       </form>
       <p>
         Don’t have an account? <Link to="/register">Register</Link>

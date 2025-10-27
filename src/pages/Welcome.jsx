@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/style.css";
 
 const Welcome = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-
-    if (!isAuthenticated || isAuthenticated !== "true") {
-      navigate("/");
-    } else {
-      setUsername(storedUser?.username || "User");
-    }
-  }, [navigate]);
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
+    logout();
     navigate("/");
   };
 
   return (
     <div className="welcome-container">
-      {/* Top right: Profile button only */}
       <div className="top-right-toolbar">
         <button
           className="profile-btn"
@@ -35,7 +24,7 @@ const Welcome = () => {
         </button>
       </div>
 
-      <h1>Welcome, {username}!</h1>
+      <h1>Welcome, {user?.username || "User"}!</h1>
       <p>You’re logged in successfully 🎉</p>
 
       <button onClick={handleLogout} className="logout-btn">
