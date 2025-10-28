@@ -1,34 +1,33 @@
-import { useState, useEffect } from "react";
-import api from "../api/axiosConfig";
+// src/hooks/useFetch.js
+import { useEffect, useState } from "react";
 
-const useFetch = (url, dependencies = []) => {
+const useFetch = (url) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(!!url);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!url) return;
+
     let isMounted = true;
     setLoading(true);
-    setError("");
-
-    api
-      .get(url)
+    fetch(url)
       .then((res) => {
-        if (isMounted) {
-          setData(res.data);
-        }
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
       })
-      .catch(() => {
-        if (isMounted) setError("Failed to fetch data");
+      .then((data) => {
+        if (isMounted) setData(data);
       })
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
+      .catch((err) => {
+        if (isMounted) setError(err);
+      })
+      .finally(() => isMounted && setLoading(false));
 
     return () => {
       isMounted = false;
     };
-  }, dependencies);
+  }, [url]);
 
   return { data, loading, error };
 };

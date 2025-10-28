@@ -1,37 +1,26 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import "../styles/style.css";
 
-const Welcome = () => {
-  const navigate = useNavigate();
+const Welcome = React.memo(() => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleProfile = useCallback(() => navigate("/profile"), [navigate]);
+  const handleLogout = useCallback(() => {
     logout();
-    navigate("/");
-  };
+    navigate("/login");
+  }, [logout, navigate]);
 
   return (
     <div className="welcome-container">
       <div className="top-right-toolbar">
-        <button
-          className="profile-btn"
-          onClick={() => navigate("/profile")}
-          aria-label="Profile"
-        >
-          👤
-        </button>
+        <button className="profile-btn" onClick={handleProfile}>👤</button>
       </div>
-
-      <h1>Welcome, {user?.username || "User"}!</h1>
-      <p>You’re logged in successfully 🎉</p>
-
-      <button onClick={handleLogout} className="logout-btn">
-        Logout
-      </button>
+      <h1>Welcome, {user?.username || "Guest"}!</h1>
+      <button className="logout-btn" onClick={handleLogout}>Logout</button>
     </div>
   );
-};
+});
 
 export default Welcome;
