@@ -19,23 +19,51 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // ✅ Login using mock API
   const login = async (username, password) => {
+    setLoading(true);
+    setError("");
+
     try {
-      setLoading(true);
-      setError("");
+      const response = await api.get(`/users?username=${username}&password=${password}`);
+      if (response.data.length > 0) {
+        const userData = response.data[0];
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("isAuthenticated", "true");
+      } else {
+        setError("Invalid username or password");
+      }
+    } catch (err) {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // Example login API (replace with real endpoint)
-      const response = await api.post("/login", { username, password });
+  // ✅ Registration — adds user to db.json
+  const register = async (username, password, email) => {
+    setLoading(true);
+    setError("");
 
-      // Simulated success (since JSONPlaceholder doesn’t support login)
-      const userData = { id: 1, username };
+    try {
+      // Check if username already exists
+      const exists = await api.get(`/users?username=${username}`);
+      if (exists.data.length > 0) {
+        setError("Username already exists");
+        return;
+      }
 
-      setUser(userData);
+      const newUser = { username, password, email };
+      const res = await api.post("/users", newUser);
+
+      setUser(res.data);
       setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("user", JSON.stringify(res.data));
       localStorage.setItem("isAuthenticated", "true");
     } catch (err) {
-      setError("Invalid credentials or network error");
+      setError("Registration failed. Try again.");
     } finally {
       setLoading(false);
     }
@@ -50,7 +78,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, loading, error, login, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        loading,
+        error,
+        login,
+        logout,
+        register,
+      }}
     >
       {children}
     </AuthContext.Provider>
