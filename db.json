@@ -29,6 +29,11 @@
       "username": "monop",
       "password": "strange",
       "email": "m@o.p"
+    },
+    {
+      "id": "f71e",
+      "username": "strange",
+      "password": "doctor"
     }
   ]
 }

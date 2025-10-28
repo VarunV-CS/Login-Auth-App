@@ -10,48 +10,54 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
   const [loading, setLoading] = useState(false);
 
-  const login = useCallback(async (username, password) => {
+  //  REGISTER
+  const register = useCallback(async (username, password) => {
     setLoading(true);
     try {
-      // simulate API or replace with real fetch
-      const res = await fetch("http://localhost:3000/login", {
+      // Check if username already exists
+      const existing = await fetch(`http://localhost:5000/users?username=${username}`);
+      const exists = await existing.json();
+
+      if (exists.length > 0) throw new Error("Username already exists");
+
+      const res = await fetch("http://localhost:5000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) throw new Error("Failed to register user");
 
-      setUser(data.user);
+      const newUser = await res.json();
+      setUser(newUser);
       setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(newUser));
     } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+      console.error("Register error:", error);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const register = useCallback(async (username, password) => {
+  //  LOGIN
+  const login = useCallback(async (username, password) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await fetch(
+        `http://localhost:5000/users?username=${username}&password=${password}`
+      );
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
 
-      setUser(data.user);
+      if (data.length === 0) throw new Error("Invalid credentials");
+
+      setUser(data[0]);
       setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(data[0]));
     } catch (error) {
-      console.error("Register error:", error);
-      throw error;
+      console.error("Login error:", error);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -63,7 +69,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   }, []);
 
-  // persist auth
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
