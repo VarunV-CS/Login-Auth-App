@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Load from localStorage
+  //  Load stored auth on app start
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedAuth = localStorage.getItem("isAuthenticated") === "true";
@@ -19,21 +19,20 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // ✅ Login using mock API
+  //  LOGIN
   const login = async (username, password) => {
     setLoading(true);
     setError("");
-
     try {
-      const response = await api.get(`/users?username=${username}&password=${password}`);
-      if (response.data.length > 0) {
-        const userData = response.data[0];
-        setUser(userData);
+      const res = await api.get(`/users?username=${username}&password=${password}`);
+      if (res.data.length > 0) {
+        const loggedInUser = res.data[0];
+        setUser(loggedInUser);
         setIsAuthenticated(true);
-        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(loggedInUser));
         localStorage.setItem("isAuthenticated", "true");
       } else {
-        setError("Invalid username or password");
+        setError("Invalid username or password.");
       }
     } catch (err) {
       setError("Network error. Please try again.");
@@ -42,26 +41,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Registration — adds user to db.json
+  // REGISTER (doesn't auto login)
   const register = async (username, password, email) => {
     setLoading(true);
     setError("");
-
     try {
-      // Check if username already exists
-      const exists = await api.get(`/users?username=${username}`);
-      if (exists.data.length > 0) {
-        setError("Username already exists");
+      const existingUser = await api.get(`/users?username=${username}`);
+      if (existingUser.data.length > 0) {
+        setError("Username already exists.");
+        setLoading(false);
         return;
       }
 
-      const newUser = { username, password, email };
-      const res = await api.post("/users", newUser);
-
-      setUser(res.data);
-      setIsAuthenticated(true);
-      localStorage.setItem("user", JSON.stringify(res.data));
-      localStorage.setItem("isAuthenticated", "true");
+      await api.post("/users", { username, password, email });
+      // confirms registration success
     } catch (err) {
       setError("Registration failed. Try again.");
     } finally {
@@ -69,11 +62,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  //Logout
   const logout = () => {
+    localStorage.clear(); // Clears all user data
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("user");
-    localStorage.removeItem("isAuthenticated");
+    setError("");
   };
 
   return (
@@ -84,8 +78,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         error,
         login,
-        logout,
         register,
+        logout,
       }}
     >
       {children}

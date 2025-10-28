@@ -1,22 +1,28 @@
 {
   "users": [
     {
-      "id": "1",
-      "username": "vampire",
-      "password": "12345",
-      "email": "vampire@example.com"
-    },
-    {
-      "id": "2",
-      "username": "john",
-      "password": "doe123",
-      "email": "john@example.com"
-    },
-    {
       "id": "eeb5",
       "username": "admin",
       "password": "12345",
       "email": "a@b.c"
+    },
+    {
+      "id": "548a",
+      "username": "howard",
+      "password": "stark",
+      "email": "h@s.co"
+    },
+    {
+      "id": "71e9",
+      "username": "alex",
+      "password": "Lexi",
+      "email": "a@l.e"
+    },
+    {
+      "id": "aa95",
+      "username": "murphy",
+      "password": "brawn",
+      "email": "d@o.j"
     }
   ]
 }

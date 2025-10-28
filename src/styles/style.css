@@ -201,3 +201,9 @@ body.dark .profile-btn:hover {
   margin-top: 10px;
   font-weight: bold;
 }
+
+.success-text {
+  color: #2b8a3e;
+  font-weight: 600;
+  margin-top: 10px;
+}

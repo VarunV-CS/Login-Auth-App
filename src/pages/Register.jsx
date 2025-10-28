@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../hooks/useAuth";
 import "../styles/style.css";
 
 const Register = () => {
-  const { register, isAuthenticated, loading, error } = useAuth();
+  const { register, loading, error } = useAuth();
   const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (isAuthenticated) navigate("/welcome");
-  }, [isAuthenticated, navigate]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     await register(username, password, email);
+    if (!error) {
+      setSuccess(true);
+      setTimeout(() => navigate("/"), 1500); // redirect after success
+    }
   };
 
   return (
@@ -34,6 +35,7 @@ const Register = () => {
       </form>
 
       {error && <p className="error-text">{error}</p>}
+      {success && <p className="success-text">Registered successfully! Redirecting...</p>}
 
       <p>
         Already have an account? <Link to="/login">Login</Link>
