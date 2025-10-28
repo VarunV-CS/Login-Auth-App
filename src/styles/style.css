@@ -195,3 +195,9 @@ body.dark .theme-btn:hover,
 body.dark .profile-btn:hover {
   background-color: #555;
 }
+
+.error-text {
+  color: #e03131;
+  margin-top: 10px;
+  font-weight: bold;
+}

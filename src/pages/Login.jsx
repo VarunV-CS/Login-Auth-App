@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import InputField from "../components/InputField";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/style.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loading, error } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,21 +14,9 @@ const Login = () => {
     if (isAuthenticated) navigate("/welcome");
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (
-      storedUser &&
-      storedUser.username === username &&
-      storedUser.password === password
-    ) {
-      login(storedUser);
-      alert("Login successful!");
-      navigate("/welcome");
-    } else {
-      alert("Invalid username or password");
-    }
+    await login(username, password);
   };
 
   return (
@@ -49,8 +37,12 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="form-btn">Login</button>
+        <button type="submit" className="form-btn" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
+
+      {error && <p className="error-text">{error}</p>}
       <p>
         Don’t have an account? <Link to="/register">Register</Link>
       </p>
