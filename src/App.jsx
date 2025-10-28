@@ -1,13 +1,15 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Welcome from "./pages/Welcome";
-import Profile from "./pages/Profile";
-import PrivateRoute from "./routes/PrivateRoute";
-import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import PrivateRoute from "./routes/PrivateRoute";
 import ThemeToggle from "./components/ThemeToggle";
+
+
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Welcome = lazy(() => import("./pages/Welcome"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 const App = () => {
   return (
@@ -15,14 +17,29 @@ const App = () => {
       <AuthProvider>
         <Router>
           <ThemeToggle />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/welcome" element={<Welcome />} />
-              <Route path="/profile" element={<Profile />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<div className="loading">Loading...</div>}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/welcome"
+                element={
+                  <PrivateRoute>
+                    <Welcome />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="*" element={<Login />} />
+            </Routes>
+          </Suspense>
         </Router>
       </AuthProvider>
     </ThemeProvider>

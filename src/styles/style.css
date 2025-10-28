@@ -151,7 +151,7 @@ body.dark button:hover {
   background-color: #c92a2a;
 }
 
-/* 🔹 Top-right toolbar (theme + profile) */
+/*  Top-right toolbar (theme + profile) */
 .top-right-toolbar {
   position: absolute;
   top: 20px;
@@ -196,6 +196,35 @@ body.dark .profile-btn:hover {
   background-color: #555;
 }
 
+[data-theme="light"] {
+  background-color: #f8f9fa;
+  color: #222;
+}
+
+[data-theme="dark"] {
+  background-color: #121212;
+  color: #e1e1e1;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-toggle:hover {
+  opacity: 0.85;
+}
+
+
 .error-text {
   color: #e03131;
   margin-top: 10px;
@@ -206,4 +235,11 @@ body.dark .profile-btn:hover {
   color: #2b8a3e;
   font-weight: 600;
   margin-top: 10px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 100px;
+  color: #333;
 }
