@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../hooks/useAuth";
@@ -14,10 +14,14 @@ const Login = () => {
     if (isAuthenticated) navigate("/welcome");
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = async (e) => {
+  const handleUsernameChange = useCallback((e) => setUsername(e.target.value), []);
+  const handlePasswordChange = useCallback((e) => setPassword(e.target.value), []);
+  const handleLogin = useCallback(
+    async (e) => {
     e.preventDefault();
     await login(username, password);
-  };
+  },
+  [username, password, login]);
 
   return (
     <div className="form-container">
@@ -27,14 +31,14 @@ const Login = () => {
           label="Username"
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={handleUsernameChange}
           required
         />
         <InputField
           label="Password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           required
         />
         <button type="submit" className="form-btn" disabled={loading}>

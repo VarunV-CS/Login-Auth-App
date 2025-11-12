@@ -23,6 +23,18 @@
       "username": "murphy",
       "password": "brawn",
       "email": "d@o.j"
+    },
+    {
+      "id": "62b6",
+      "username": "heythere",
+      "password": "hellBreak",
+      "email": "h@b.c"
+    },
+    {
+      "id": "7bef",
+      "username": "helloThere",
+      "password": "breakout",
+      "email": "hso@m.c"
     }
   ]
 }

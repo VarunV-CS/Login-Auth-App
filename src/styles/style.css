@@ -131,7 +131,7 @@ body.dark button:hover {
   background-color: #3d3d3d;
 }
 
-/* ========== Welcome Page Styling ========== */
+/* Welcome Page Styling */
 .welcome-container {
   text-align: center;
   padding: 2rem;
@@ -151,7 +151,7 @@ body.dark button:hover {
   background-color: #c92a2a;
 }
 
-/* 🔹 Top-right toolbar (theme + profile) */
+/*Top-right toolbar (theme + profile) */
 .top-right-toolbar {
   position: absolute;
   top: 20px;
@@ -206,4 +206,11 @@ body.dark .profile-btn:hover {
   color: #2b8a3e;
   font-weight: 600;
   margin-top: 10px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 100px;
+  color: #333;
 }

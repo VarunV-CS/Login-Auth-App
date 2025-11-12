@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/style.css";
 
-const InputField = ({ label, type, value, onChange, required }) => {
+const InputField = React.memo(({ label, type, value, onChange, required }) => {
   return (
     <div className="input-field">
       <label>{label}</label>
@@ -13,6 +13,6 @@ const InputField = ({ label, type, value, onChange, required }) => {
       />
     </div>
   );
-};
+});
 
 export default InputField;

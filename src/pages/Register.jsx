@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useAuth } from "../hooks/useAuth";
@@ -13,14 +13,17 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(
+     async (e) => {
     e.preventDefault();
     await register(username, password, email);
     if (!error) {
       setSuccess(true);
       setTimeout(() => navigate("/"), 1500); // redirect after success
     }
-  };
+  },
+  [username, password, email, register, error, navigate]
+);
 
   return (
     <div className="form-container">

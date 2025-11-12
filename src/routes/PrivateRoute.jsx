@@ -1,10 +1,10 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+  return isAuthenticated ? children : <Navigate to="/" replace />;
 };
 
-export default PrivateRoute;
+export default React.memo(PrivateRoute);
