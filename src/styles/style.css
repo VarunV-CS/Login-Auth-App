@@ -214,3 +214,7 @@ body.dark .profile-btn:hover {
   margin-top: 100px;
   color: #333;
 }
+
+.form-container, .welcome-container {
+  color: inherit;
+}

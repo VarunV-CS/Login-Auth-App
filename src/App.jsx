@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 import PrivateRoute from "./routes/PrivateRoute";
 import "./styles/style.css";
 
@@ -16,29 +17,30 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <Suspense fallback={<div className="loading">Loading...</div>}>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/welcome"
-                element={
-                  <PrivateRoute>
-                    <Welcome />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="*" element={<Login />} />
-            </Routes>
-          </Suspense>
+          <ThemeToggle/>
+            <Suspense fallback={<div className="loading">Loading...</div>}>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/welcome"
+                  element={
+                    <PrivateRoute>
+                      <Welcome />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="*" element={<Login />} />
+              </Routes>
+            </Suspense>
         </Router>
       </AuthProvider>
     </ThemeProvider>
